@@ -27,3 +27,5 @@ export const Button = styled.button`
     cursor: not-allowed;
   }
 `;
+
+export default Button;

@@ -16,3 +16,5 @@ export const Input = styled.input`
     border-color: ${({ theme }) => theme.colors.primary.purpleMain}
   }
 `;
+
+export default Input;

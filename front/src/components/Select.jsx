@@ -16,3 +16,5 @@ export const Select = styled.select`
     border-color: ${({ theme }) => theme.colors.primary.purpleMain}
   }
 `;
+
+export default Select;
