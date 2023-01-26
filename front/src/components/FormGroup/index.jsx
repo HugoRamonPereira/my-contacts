@@ -1,11 +1,11 @@
 import PropTypes from 'prop-types';
-import { Container } from './styles';
+import * as Styled from './styles';
 
 export default function FormGroup({ children }) {
   return (
-    <Container>
+    <Styled.Container>
       {children}
-    </Container>
+    </Styled.Container>
   );
 }
 

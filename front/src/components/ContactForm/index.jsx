@@ -1,10 +1,11 @@
+import PropTypes from 'prop-types';
 import FormGroup from '../FormGroup';
 import * as Styled from './styles';
 import Input from '../Input';
 import Select from '../Select';
 import Button from '../Button';
 
-export default function ContactForm() {
+export default function ContactForm({ buttonText }) {
   return (
     <Styled.Form>
       <FormGroup>
@@ -23,9 +24,13 @@ export default function ContactForm() {
       </FormGroup>
       <Styled.ButtonContainer>
         <Button type="submit">
-          Save Changes
+          {buttonText}
         </Button>
       </Styled.ButtonContainer>
     </Styled.Form>
   );
 }
+
+ContactForm.propTypes = {
+  buttonText: PropTypes.string.isRequired,
+};

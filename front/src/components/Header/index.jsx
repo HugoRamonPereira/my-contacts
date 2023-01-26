@@ -1,10 +1,10 @@
-import { Container } from './styles';
+import * as Styled from './styles';
 import logo from '../../assets/images/logo.svg';
 
 export default function Header() {
   return (
-    <Container>
+    <Styled.Container>
       <img src={logo} alt="MyContacts" width="201px" />
-    </Container>
+    </Styled.Container>
   );
 }

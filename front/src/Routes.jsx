@@ -1,15 +1,17 @@
-import { Switch, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 
 import Home from './pages/Home';
 import NewContact from './pages/NewContact';
 import EditContact from './pages/EditContact';
+import NotFound from './pages/NotFound';
 
-export default function Routes() {
+export default function Router() {
   return (
-    <Switch>
-      <Route path="/" exact component={Home} />
-      <Route path="/new" component={NewContact} />
-      <Route path="/edit/:id" component={EditContact} />
-    </Switch>
+    <Routes>
+      <Route path="/" exact element={<Home />} />
+      <Route path="/new" element={<NewContact />} />
+      <Route path="/edit/:id" element={<EditContact />} />
+      <Route path="*" element={<NotFound />} />
+    </Routes>
   );
 }

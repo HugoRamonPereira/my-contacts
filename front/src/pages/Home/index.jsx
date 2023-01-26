@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import * as Styled from './styles';
 import arrow from '../../assets/images/icon/arrow.svg';
 import edit from '../../assets/images/icon/edit.svg';
@@ -11,7 +12,7 @@ export default function Home() {
       </Styled.SearchInputContainer>
       <Styled.Header>
         <strong>3 contacts</strong>
-        <a href="/">New contact</a>
+        <Link to="/new">New contact</Link>
       </Styled.Header>
       <Styled.ListContainer>
         <header>
@@ -30,45 +31,9 @@ export default function Home() {
             <span>(88) 99772-5550</span>
           </div>
           <div className="actions">
-            <a href="/">
+            <Link to="/edit/123">
               <img src={edit} alt="Edit" />
-            </a>
-            <button type="button">
-              <img src={trashcan} alt="Delete" />
-            </button>
-          </div>
-        </Styled.ContactCard>
-        <Styled.ContactCard>
-          <div className="info">
-            <div className="contact-name">
-              <strong>Ramon Pereira</strong>
-              <small>Instagram</small>
-            </div>
-            <span>ramone.techie@gmail.com</span>
-            <span>(88) 99772-5550</span>
-          </div>
-          <div className="actions">
-            <a href="/">
-              <img src={edit} alt="Edit" />
-            </a>
-            <button type="button">
-              <img src={trashcan} alt="Delete" />
-            </button>
-          </div>
-        </Styled.ContactCard>
-        <Styled.ContactCard>
-          <div className="info">
-            <div className="contact-name">
-              <strong>Ramon Pereira</strong>
-              <small>Instagram</small>
-            </div>
-            <span>ramone.techie@gmail.com</span>
-            <span>(88) 99772-5550</span>
-          </div>
-          <div className="actions">
-            <a href="/">
-              <img src={edit} alt="Edit" />
-            </a>
+            </Link>
             <button type="button">
               <img src={trashcan} alt="Delete" />
             </button>
