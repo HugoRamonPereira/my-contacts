@@ -11,8 +11,10 @@ export default function ContactForm({ buttonText }) {
       <FormGroup>
         <Input placeholder="Name" />
       </FormGroup>
-      <FormGroup>
-        <Input placeholder="Email" />
+      <FormGroup
+        error="Invalid email! "
+      >
+        <Input placeholder="Email" error />
       </FormGroup>
       <FormGroup>
         <Input placeholder="Phone" />

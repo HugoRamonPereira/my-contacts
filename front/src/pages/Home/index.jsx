@@ -3,14 +3,14 @@ import * as Styled from './styles';
 import arrow from '../../assets/images/icon/arrow.svg';
 import edit from '../../assets/images/icon/edit.svg';
 import trashcan from '../../assets/images/icon/trashcan.svg';
-import Loader from '../../components/Loader';
+// import Loader from '../../components/Loader';
 // import Modal from '../../components/Modal';
 
 export default function Home() {
   return (
     <Styled.Container>
       {/* <Modal danger /> */}
-      <Loader />
+      {/* <Loader /> */}
       <Styled.SearchInputContainer>
         <input type="text" placeholder="Search contact..." />
       </Styled.SearchInputContainer>
