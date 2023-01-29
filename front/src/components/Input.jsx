@@ -11,6 +11,7 @@ export const Input = styled.input`
   outline: none;
   font-size: 1rem;
   transition: border-color 0.2s ease-in;
+  /* appearance: none; had no effects on Android devices */
 
   &:focus {
     border-color: ${({ theme }) => theme.colors.primary.purpleMain}
