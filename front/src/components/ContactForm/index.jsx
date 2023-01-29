@@ -6,26 +6,23 @@ import Input from '../Input';
 import Select from '../Select';
 import Button from '../Button';
 import isEmailValid from '../../utils/isValidEmail';
+import { useErrors } from '../../hooks/useErrors';
 
 export default function ContactForm({ buttonText }) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [category, setCategory] = useState('');
-  const [errors, setErrors] = useState([]);
+
+  const { setError, removeError, getErrorMessageByFieldName } = useErrors();
 
   const handleNameChange = (e) => {
     setName(e.target.value);
 
     if (!e.target.value) {
-      setErrors((prevState) => [
-        ...prevState,
-        { field: 'name', message: 'Name is required!' },
-      ]);
+      setError({ field: 'name', message: 'Name is required!' });
     } else {
-      setErrors((prevState) => prevState.filter(
-        (error) => error.field !== 'name',
-      ));
+      removeError('name');
     }
   };
 
@@ -33,25 +30,10 @@ export default function ContactForm({ buttonText }) {
     setEmail(e.target.value);
 
     if (e.target.value && !isEmailValid(e.target.value)) {
-      const emailErrorExists = errors.find((error) => error.field === 'email');
-
-      if (emailErrorExists) {
-        return;
-      }
-
-      setErrors((prevState) => [
-        ...prevState,
-        { field: 'email', message: 'Email is not valid!' },
-      ]);
+      setError({ field: 'email', message: 'Email is not valid!' });
     } else {
-      setErrors((prevState) => prevState.filter(
-        (error) => error.field !== 'email',
-      ));
+      removeError('email');
     }
-  };
-
-  const getErrorMessageByFieldName = (fieldName) => {
-    return errors.find((error) => error.field === fieldName)?.message;
   };
 
   const handleSubmit = (e) => {
