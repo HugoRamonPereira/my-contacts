@@ -21,4 +21,6 @@ This will list the running containers and if you wish to see all the existing co
 
 5th step: In case you wish to stop the container use: docker stop (name of the container or the container id)
 
+6th step: In case you wish to execute the container: docker exec -it pg bash.
 
+7th step: To log in to Postgres: psql -U root (the name of the user we passed earlier).
