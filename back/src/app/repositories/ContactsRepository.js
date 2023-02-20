@@ -5,14 +5,19 @@ class ContactsRepository {
     const orderDirection = orderBy.toUpperCase() === 'DESC' ? 'DESC' : 'ASC';
     const rows = await db.query(`
       SELECT contacts.*, categories.name AS category_name FROM contacts
-      JOIN categories On categories.id = contacts.category_id
+      LEFT JOIN categories ON categories.id = contacts.category_id
       ORDER BY contacts.name ${orderDirection}
     `);
     return rows;
   }
 
   async findById(id) {
-    const [row] = await db.query('SELECT * FROM contacts WHERE id = $1', [id]);
+    const [row] = await db.query(`
+      SELECT contacts.*, categories.name AS category_name
+      FROM contacts
+      LEFT JOIN categories ON categories.id = contacts.category_id
+      WHERE contacts.id = $1
+    `, [id]);
     return row;
   }
 
