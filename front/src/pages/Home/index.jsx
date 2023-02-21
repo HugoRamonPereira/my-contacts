@@ -10,6 +10,10 @@ import trashcan from '../../assets/images/icon/trashcan.svg';
 export default function Home() {
   const [contacts, setContacts] = useState([]);
   const [orderBy, setOrderBy] = useState('asc');
+  const [searchUser, setSearchUser] = useState('');
+  const filteredContacts = contacts.filter((contact) => (
+    contact.name.toLowerCase().includes(searchUser.toLocaleLowerCase())
+  ));
 
   useEffect(() => {
     fetch(`http://localhost:3001/contacts?orderBy=${orderBy}`)
@@ -28,30 +32,45 @@ export default function Home() {
     );
   };
 
+  const handleSearchUser = (e) => {
+    setSearchUser(e.target.value);
+  };
+
   return (
     <Styled.Container>
       {/* <Modal danger /> */}
       {/* <Loader /> */}
       <Styled.SearchInputContainer>
-        <input type="text" placeholder="Search contact..." />
+        <input
+          value={searchUser}
+          type="text"
+          placeholder="Search contact..."
+          onChange={handleSearchUser}
+        />
       </Styled.SearchInputContainer>
       <Styled.Header>
         <strong>
-          {contacts.length}
+          {filteredContacts.length}
           &nbsp;
-          {contacts.length === 1 ? 'contact' : 'contacts'}
+          {filteredContacts.length === 1 ? 'contact' : 'contacts'}
         </strong>
         <Link to="/new">New contact</Link>
       </Styled.Header>
 
-      <Styled.ListHeader orderBy={orderBy}>
-        <button type="button" onClick={handleToggleOrderBy}>
-          <span>Name</span>
-          <img src={arrow} alt="arrow" />
-        </button>
-      </Styled.ListHeader>
+      {filteredContacts.length > 0 ? (
+        <Styled.ListHeader orderBy={orderBy}>
+          <button type="button" onClick={handleToggleOrderBy}>
+            <span>Name</span>
+            <img src={arrow} alt="arrow" />
+          </button>
+        </Styled.ListHeader>
+      ) : (
+        <Styled.NoSearchResults>
+          No results matching your search!
+        </Styled.NoSearchResults>
+      )}
 
-      {contacts.map((contact) => (
+      {filteredContacts.map((contact) => (
         <Styled.ContactCard key={contact.id}>
           <div className="info">
             <div className="contact-name">

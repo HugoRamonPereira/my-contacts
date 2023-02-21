@@ -122,3 +122,10 @@ export const ContactCard = styled.div`
     }
   }
 `;
+
+export const NoSearchResults = styled.p`
+  margin-top: 5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
