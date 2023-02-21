@@ -9,9 +9,10 @@ import trashcan from '../../assets/images/icon/trashcan.svg';
 
 export default function Home() {
   const [contacts, setContacts] = useState([]);
+  const [orderBy, setOrderBy] = useState('asc');
 
   useEffect(() => {
-    fetch('http://localhost:3001/contacts')
+    fetch(`http://localhost:3001/contacts?orderBy=${orderBy}`)
       .then(async (response) => {
         const json = await response.json();
         setContacts(json);
@@ -19,7 +20,13 @@ export default function Home() {
       .catch((error) => {
         console.log('error', error);
       });
-  }, []);
+  }, [orderBy]);
+
+  const handleToggleOrderBy = () => {
+    setOrderBy(
+      (prevState) => (prevState === 'asc' ? 'desc' : 'asc'),
+    );
+  };
 
   return (
     <Styled.Container>
@@ -36,36 +43,36 @@ export default function Home() {
         </strong>
         <Link to="/new">New contact</Link>
       </Styled.Header>
-      <Styled.ListContainer>
-        <header>
-          <button type="button">
-            <span>Name</span>
-            <img src={arrow} alt="arrow" />
-          </button>
-        </header>
-        {contacts.map((contact) => (
-          <Styled.ContactCard key={contact.id}>
-            <div className="info">
-              <div className="contact-name">
-                <strong>{contact.name}</strong>
-                {contact.category_name && (
-                  <small>{contact.category_name}</small>
-                )}
-              </div>
-              <span>{contact.email}</span>
-              <span>{contact.phone}</span>
+
+      <Styled.ListHeader orderBy={orderBy}>
+        <button type="button" onClick={handleToggleOrderBy}>
+          <span>Name</span>
+          <img src={arrow} alt="arrow" />
+        </button>
+      </Styled.ListHeader>
+
+      {contacts.map((contact) => (
+        <Styled.ContactCard key={contact.id}>
+          <div className="info">
+            <div className="contact-name">
+              <strong>{contact.name}</strong>
+              {contact.category_name && (
+              <small>{contact.category_name}</small>
+              )}
             </div>
-            <div className="actions">
-              <Link to={`/edit/${contact.id}`}>
-                <img src={edit} alt="Edit" />
-              </Link>
-              <button type="button">
-                <img src={trashcan} alt="Delete" />
-              </button>
-            </div>
-          </Styled.ContactCard>
-        ))}
-      </Styled.ListContainer>
+            <span>{contact.email}</span>
+            <span>{contact.phone}</span>
+          </div>
+          <div className="actions">
+            <Link to={`/edit/${contact.id}`}>
+              <img src={edit} alt="Edit" />
+            </Link>
+            <button type="button">
+              <img src={trashcan} alt="Delete" />
+            </button>
+          </div>
+        </Styled.ContactCard>
+      ))}
     </Styled.Container>
   );
 }
