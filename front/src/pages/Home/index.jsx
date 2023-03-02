@@ -1,28 +1,37 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import * as Styled from './styles';
 import arrow from '../../assets/images/icon/arrow.svg';
 import edit from '../../assets/images/icon/edit.svg';
 import trashcan from '../../assets/images/icon/trashcan.svg';
-// import Loader from '../../components/Loader';
+import Loader from '../../components/Loader';
+import delay from '../../utils/delay';
 // import Modal from '../../components/Modal';
 
 export default function Home() {
   const [contacts, setContacts] = useState([]);
   const [orderBy, setOrderBy] = useState('asc');
   const [searchUser, setSearchUser] = useState('');
-  const filteredContacts = contacts.filter((contact) => (
+  const [isLoading, setIsLoading] = useState(true);
+
+  const filteredContacts = useMemo(() => contacts.filter((contact) => (
     contact.name.toLowerCase().includes(searchUser.toLocaleLowerCase())
-  ));
+  )), [contacts, searchUser]);
 
   useEffect(() => {
+    setIsLoading(true);
     fetch(`http://localhost:3001/contacts?orderBy=${orderBy}`)
       .then(async (response) => {
+        await delay(2000);
         const json = await response.json();
         setContacts(json);
+        setIsLoading(false);
       })
       .catch((error) => {
         console.log('error', error);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   }, [orderBy]);
 
@@ -39,7 +48,7 @@ export default function Home() {
   return (
     <Styled.Container>
       {/* <Modal danger /> */}
-      {/* <Loader /> */}
+      {isLoading && <Loader />}
       <Styled.SearchInputContainer>
         <input
           value={searchUser}
