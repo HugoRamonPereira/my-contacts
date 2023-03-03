@@ -5,7 +5,7 @@ import arrow from '../../assets/images/icon/arrow.svg';
 import edit from '../../assets/images/icon/edit.svg';
 import trashcan from '../../assets/images/icon/trashcan.svg';
 import Loader from '../../components/Loader';
-import delay from '../../utils/delay';
+import ContactService from '../../services/ContactService';
 // import Modal from '../../components/Modal';
 
 export default function Home() {
@@ -19,20 +19,22 @@ export default function Home() {
   )), [contacts, searchUser]);
 
   useEffect(() => {
-    setIsLoading(true);
-    fetch(`http://localhost:3001/contacts?orderBy=${orderBy}`)
-      .then(async (response) => {
-        await delay(2000);
-        const json = await response.json();
-        setContacts(json);
+    async function loadContacts() {
+      try {
+        setIsLoading(true);
+
+        const contactsList = await ContactService.listContacts(orderBy);
+
+        setContacts(contactsList);
         setIsLoading(false);
-      })
-      .catch((error) => {
-        console.log('error', error);
-      })
-      .finally(() => {
+      } catch (error) {
+        console.log('Error', error);
+      } finally {
         setIsLoading(false);
-      });
+      }
+    }
+
+    loadContacts();
   }, [orderBy]);
 
   const handleToggleOrderBy = () => {
@@ -48,7 +50,7 @@ export default function Home() {
   return (
     <Styled.Container>
       {/* <Modal danger /> */}
-      {isLoading && <Loader />}
+      <Loader isLoading={isLoading} />
       <Styled.SearchInputContainer>
         <input
           value={searchUser}
