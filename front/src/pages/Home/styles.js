@@ -27,8 +27,10 @@ export const Header = styled.header`
   padding-inline: 0.4rem;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: ${({ hasError }) => (hasError ? 'flex-end' : 'space-between')};
   margin-top: 2rem;
+  border-bottom: 2px solid ${({ theme }) => theme.colors.gray.gray100};
+  padding-bottom: 1.5rem;
 
   strong {
     font-size: 1.5rem;
@@ -123,9 +125,28 @@ export const ContactCard = styled.div`
   }
 `;
 
-export const NoSearchResults = styled.p`
-  margin-top: 5rem;
+export const ErrorContainer = styled.div`
+  margin-top: 1.5rem;
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+
+  .details {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    strong {
+      font-size: 1rem;
+      color: ${({ theme }) => theme.colors.red.red900};
+      display: block;
+      margin-bottom: 1.5rem;
+    }
+  }
+
+  img {
+    margin-inline: auto;
+    margin-bottom: 1.5rem;
+    width: 80px;
+  }
 `;
