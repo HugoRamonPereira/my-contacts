@@ -1,4 +1,6 @@
-import { useEffect, useMemo, useState } from 'react';
+import {
+  useCallback, useEffect, useMemo, useState,
+} from 'react';
 import { Link } from 'react-router-dom';
 import * as Styled from './styles';
 import ContactService from '../../services/ContactService';
@@ -8,6 +10,8 @@ import edit from '../../assets/images/icon/edit.svg';
 import trashcan from '../../assets/images/icon/trashcan.svg';
 import Loader from '../../components/Loader';
 import ErrorX from '../../assets/images/icon/red-x-line-icon.svg';
+import EmptyBox from '../../assets/images/icon/empty-box.svg';
+import magnifier from '../../assets/images/icon/magnifier-question.svg';
 // import Modal from '../../components/Modal';
 
 export default function Home() {
@@ -21,10 +25,11 @@ export default function Home() {
     contact.name.toLowerCase().includes(searchUser.toLocaleLowerCase())
   )), [contacts, searchUser]);
 
-  async function loadContacts() {
+  const loadContacts = useCallback(async () => {
     try {
       setIsLoading(true);
       const contactsList = await ContactService.listContacts(orderBy);
+      // const contactsList = []; await ContactService.listContacts(orderBy);
       setHasError(false);
       setContacts(contactsList);
     } catch {
@@ -32,11 +37,11 @@ export default function Home() {
     } finally {
       setIsLoading(false);
     }
-  }
+  }, [orderBy]);
 
   useEffect(() => {
     loadContacts();
-  }, [orderBy]);
+  }, [loadContacts]);
 
   const handleToggleOrderBy = () => {
     setOrderBy(
@@ -56,16 +61,29 @@ export default function Home() {
     <Styled.Container>
       {/* <Modal danger /> */}
       <Loader isLoading={isLoading} />
-      <Styled.SearchInputContainer>
-        <input
-          value={searchUser}
-          type="text"
-          placeholder="Search contact..."
-          onChange={handleSearchUser}
-        />
-      </Styled.SearchInputContainer>
-      <Styled.Header hasError={hasError}>
-        {!hasError && (
+      {contacts.length > 0 && (
+        <Styled.SearchInputContainer>
+          <input
+            value={searchUser}
+            type="text"
+            placeholder="Search contact..."
+            onChange={handleSearchUser}
+          />
+        </Styled.SearchInputContainer>
+      )}
+      <Styled.Header
+        justifyContent={
+          // eslint-disable-next-line no-nested-ternary
+          hasError
+            ? 'flex-end'
+            : (
+              contacts.length > 0
+                ? 'space-between'
+                : 'center'
+            )
+        }
+      >
+        {(!hasError && contacts.length > 0) && (
           <strong>
             {filteredContacts.length}
             &nbsp;
@@ -89,6 +107,36 @@ export default function Home() {
 
       {!hasError && (
         <>
+          {(contacts.length < 1 && !isLoading) && (
+            <Styled.EmptyListContainer>
+              <img src={EmptyBox} alt="Empty box" />
+              <p>
+                You don&apos;t have any registered contacts yet!
+                <br />
+                Click the button above
+                <strong> &ldquo;New Contact&rdquo; </strong>
+                <br />
+                to register your first one!
+              </p>
+            </Styled.EmptyListContainer>
+          )}
+
+          {(contacts.length > 0 && filteredContacts < 1) && (
+            <Styled.NotFoundContainer>
+              <img src={magnifier} alt="Magnifier" />
+
+              <span>
+                No contacts were found for
+                {' '}
+                <strong>
+                  &ldquo;
+                  {searchUser}
+                  &rdquo;.
+                </strong>
+              </span>
+            </Styled.NotFoundContainer>
+          )}
+
           {filteredContacts.length > 0 && (
           <Styled.ListHeader orderBy={orderBy}>
             <button type="button" onClick={handleToggleOrderBy}>

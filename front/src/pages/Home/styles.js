@@ -27,7 +27,7 @@ export const Header = styled.header`
   padding-inline: 0.4rem;
   display: flex;
   align-items: center;
-  justify-content: ${({ hasError }) => (hasError ? 'flex-end' : 'space-between')};
+  justify-content: ${({ justifyContent }) => justifyContent};
   margin-top: 2rem;
   border-bottom: 2px solid ${({ theme }) => theme.colors.gray.gray100};
   padding-bottom: 1.5rem;
@@ -148,5 +148,35 @@ export const ErrorContainer = styled.div`
     margin-inline: auto;
     margin-bottom: 1.5rem;
     width: 80px;
+  }
+`;
+
+export const EmptyListContainer = styled.div`
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  p {
+    color: ${({ theme }) => theme.colors.gray.gray200};
+    margin-top: 1.5rem;
+    text-align: center;
+    line-height: 1.7;
+
+    strong {
+      color: ${({ theme }) => theme.colors.primary.purpleMain};
+    }
+  }
+`;
+
+export const NotFoundContainer = styled.div`
+  margin-top: 2rem;
+  display: flex;
+  align-items: flex-start;
+
+  span {
+    color: ${({ theme }) => theme.colors.gray.gray200};
+    margin-left: 1.2rem;
+    word-break: break-word;
   }
 `;
