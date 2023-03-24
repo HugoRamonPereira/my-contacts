@@ -1,4 +1,5 @@
-import { useState } from 'react';
+/* eslint-disable no-shadow */
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import FormGroup from '../FormGroup';
 import * as Styled from './styles';
@@ -6,6 +7,7 @@ import Input from '../Input';
 import Select from '../Select';
 import Button from '../Button';
 import isEmailValid from '../../utils/isValidEmail';
+import CategoriesService from '../../services/CategoriesService';
 import { useErrors } from '../../hooks/useErrors';
 import formatPhone from '../../utils/formatPhone';
 
@@ -13,7 +15,9 @@ export default function ContactForm({ buttonText }) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
-  const [category, setCategory] = useState('');
+  const [categoryId, setCategoryId] = useState('');
+  const [categories, setCategories] = useState([]);
+  const [isLoadingCategories, setIsLoadingCategories] = useState(true);
 
   const {
     errors,
@@ -21,7 +25,21 @@ export default function ContactForm({ buttonText }) {
     removeError,
     getErrorMessageByFieldName,
   } = useErrors();
+
   const allFormFieldsValid = (name && errors.length === 0);
+
+  useEffect(() => {
+    async function loadCategories() {
+      try {
+        const categoriesList = await CategoriesService.listCategories();
+        setCategories(categoriesList);
+      } catch {} finally {
+        setIsLoadingCategories(false);
+      }
+    }
+
+    loadCategories();
+  }, []);
 
   const handleNameChange = (e) => {
     setName(e.target.value);
@@ -79,15 +97,21 @@ export default function ContactForm({ buttonText }) {
           maxLength="15"
         />
       </FormGroup>
-      <FormGroup>
+      <FormGroup isLoading={isLoadingCategories}>
         <Select
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
+          value={categoryId}
+          onChange={(e) => setCategoryId(e.target.value)}
+          disabled={isLoadingCategories}
         >
           <option value="">Category</option>
-          <option value="Facebook">Facebook</option>
-          <option value="Instagram">Instagram</option>
-          <option value="Twitter">Twitter</option>
+          {categories.map((category) => (
+            <option
+              key={category.id}
+              value={category.id}
+            >
+              {category.name}
+            </option>
+          ))}
         </Select>
       </FormGroup>
       <Styled.ButtonContainer>

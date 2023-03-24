@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import * as Styled from './styles';
 import ReactPortal from '../ReactPortal';
+import Spinner from '../Spinner';
 
 export default function Loader({ isLoading }) {
   if (!isLoading) {
@@ -10,7 +11,7 @@ export default function Loader({ isLoading }) {
   return (
     <ReactPortal containerId="loader-root">
       <Styled.Overlay>
-        <div className="loader" />
+        <Spinner />
       </Styled.Overlay>
     </ReactPortal>
   );

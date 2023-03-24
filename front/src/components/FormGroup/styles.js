@@ -11,4 +11,8 @@ export const Container = styled.div`
     display: block;
     margin-top: 0.5rem;
   }
+
+  .form-item {
+    position: relative;
+  }
 `;
