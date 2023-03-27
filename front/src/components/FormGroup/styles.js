@@ -9,10 +9,16 @@ export const Container = styled.div`
     color: ${({ theme }) => theme.colors.red.red300};
     font-size: 12px;
     display: block;
-    margin-top: 0.5rem;
+    margin-top: 8px;
   }
 
   .form-item {
     position: relative;
+
+    .loader {
+      position: absolute;
+      top: 18px;
+      right: 16px;
+    }
   }
 `;
