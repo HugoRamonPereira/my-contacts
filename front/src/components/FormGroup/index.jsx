@@ -3,7 +3,6 @@ import Spinner from '../Spinner';
 import * as Styled from './styles';
 
 export default function FormGroup({ children, error, isLoading }) {
-  console.log(isLoading);
   return (
     <Styled.Container>
       <div className="form-item">
