@@ -19,5 +19,8 @@ export default {
       red700: '#F63131',
       red900: '#FF4141',
     },
+    green: {
+      green500: '#51CA73',
+    },
   },
 };
