@@ -20,6 +20,7 @@ export const Select = styled.select`
   &[disabled] {
     background-color: ${({ theme }) => theme.colors.gray.gray100};
     border-color: ${({ theme }) => theme.colors.gray.gray200};
+    opacity: 1;
   }
 `;
 

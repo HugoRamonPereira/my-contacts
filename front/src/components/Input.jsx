@@ -21,6 +21,11 @@ export const Input = styled.input`
     color: ${theme.colors.red.red300};
     border-color: ${theme.colors.red.red300} !important;
   `}
+
+  &[disabled] {
+    background-color: ${({ theme }) => theme.colors.gray.gray100};
+    border-color: ${({ theme }) => theme.colors.gray.gray200};
+  }
 `;
 
 export default Input;

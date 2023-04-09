@@ -4,7 +4,7 @@ import {
 import { Link } from 'react-router-dom';
 import * as Styled from './styles';
 import ContactService from '../../services/ContactService';
-import Button from '../../components/Button';
+import { Button } from '../../components/Button';
 import arrow from '../../assets/images/icon/arrow.svg';
 import edit from '../../assets/images/icon/edit.svg';
 import trashcan from '../../assets/images/icon/trashcan.svg';
