@@ -28,7 +28,7 @@ export const Container = styled.div`
     margin-top: 0.750rem;
   }
 
-  strong {
-    margin-left: 0.5rem;
+  img {
+    margin-right: 0.5rem;
   }
 `;
