@@ -77,6 +77,10 @@ export default function ContactForm({ buttonText, onSubmit }) {
     });
 
     setIsSubmitting(false);
+    setName('');
+    setEmail('');
+    setPhone('');
+    setCategoryId('');
   };
 
   return (
