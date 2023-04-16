@@ -1,5 +1,7 @@
 /* eslint-disable no-shadow */
-import { useState, useEffect } from 'react';
+import {
+  useState, useEffect, forwardRef, useImperativeHandle,
+} from 'react';
 import PropTypes from 'prop-types';
 import FormGroup from '../FormGroup';
 import * as Styled from './styles';
@@ -12,7 +14,7 @@ import { useErrors } from '../../hooks/useErrors';
 import formatPhone from '../../utils/formatPhone';
 import Spinner from '../Spinner';
 
-export default function ContactForm({ buttonText, onSubmit }) {
+const ContactForm = forwardRef(({ buttonText, onSubmit }, ref) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
@@ -29,6 +31,15 @@ export default function ContactForm({ buttonText, onSubmit }) {
   } = useErrors();
 
   const allFormFieldsValid = (name && errors.length === 0);
+
+  useImperativeHandle(ref, () => ({
+    setFieldsValues: (contact) => {
+      setName(contact.name ?? '');
+      setEmail(contact.email ?? '');
+      setPhone(formatPhone(contact.phone ?? ''));
+      setCategoryId(contact.category_id ?? '');
+    },
+  }), []);
 
   useEffect(() => {
     async function loadCategories() {
@@ -77,10 +88,6 @@ export default function ContactForm({ buttonText, onSubmit }) {
     });
 
     setIsSubmitting(false);
-    setName('');
-    setEmail('');
-    setPhone('');
-    setCategoryId('');
   };
 
   return (
@@ -142,9 +149,11 @@ export default function ContactForm({ buttonText, onSubmit }) {
       </Styled.ButtonContainer>
     </Styled.Form>
   );
-}
+});
 
 ContactForm.propTypes = {
   buttonText: PropTypes.string.isRequired,
   onSubmit: PropTypes.func.isRequired,
 };
+
+export default ContactForm;
