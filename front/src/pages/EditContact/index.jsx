@@ -5,6 +5,7 @@ import PageHeader from '../../components/PageHeader';
 import ContactsService from '../../services/ContactService';
 import Loader from '../../components/Loader';
 import toast from '../../utils/toast';
+import useIsMounted from '../../hooks/useIsMounted';
 
 export default function EditContact() {
   const [isLoading, setIsLoading] = useState(true);
@@ -12,25 +13,31 @@ export default function EditContact() {
   const [contactName, setContactName] = useState('');
   const { id } = useParams();
   const navigate = useNavigate();
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     async function loadContact() {
       try {
         const contact = await ContactsService.getContactById(id);
-        contactFormRef.current.setFieldsValues(contact);
-        setIsLoading(false);
-        setContactName(contact.name);
+
+        if (isMounted()) {
+          contactFormRef.current.setFieldsValues(contact);
+          setIsLoading(false);
+          setContactName(contact.name);
+        }
       } catch {
-        navigate('/');
-        toast({
-          type: 'error',
-          text: 'Contact couldn\'t be found!',
-        });
+        if (isMounted()) {
+          navigate('/');
+          toast({
+            type: 'error',
+            text: 'Contact couldn\'t be found!',
+          });
+        }
       }
     }
 
     loadContact();
-  }, [id, navigate]);
+  }, [id, navigate, isMounted]);
 
   const handleSubmit = async (formData) => {
     try {

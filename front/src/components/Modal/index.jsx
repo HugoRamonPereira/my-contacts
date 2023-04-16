@@ -4,8 +4,22 @@ import { Button } from '../Button';
 import ReactPortal from '../ReactPortal';
 
 export default function Modal({
-  danger, title, children, confirmLabel, cancelLabel, onCancel, onConfirm,
+  danger,
+  title,
+  children,
+  visible,
+  confirmLabel,
+  cancelLabel,
+  onCancel,
+  onConfirm,
+  isLoading,
 }) {
+  // This controls the visibility of the modal
+  // A prop is being passed here so that we can control the modal here
+  // Not in the components we use it
+  if (!visible) {
+    return null;
+  }
   return (
     <ReactPortal containerId="modal-root">
       <Styled.Overlay>
@@ -19,12 +33,14 @@ export default function Modal({
               type="button"
               className="cancelBtn"
               onClick={onCancel}
+              disabled={isLoading}
             >
               {cancelLabel}
             </button>
             <Button
               type="button"
               danger={danger}
+              isLoading={isLoading}
               onClick={onConfirm}
             >
               {confirmLabel}
@@ -40,6 +56,8 @@ Modal.propTypes = {
   danger: PropTypes.bool,
   title: PropTypes.string.isRequired,
   children: PropTypes.node.isRequired,
+  visible: PropTypes.bool.isRequired,
+  isLoading: PropTypes.bool,
   cancelLabel: PropTypes.string,
   confirmLabel: PropTypes.string,
   onCancel: PropTypes.func.isRequired,
@@ -48,6 +66,7 @@ Modal.propTypes = {
 
 Modal.defaultProps = {
   danger: false,
+  isLoading: false,
   cancelLabel: 'Cancel',
   confirmLabel: 'Confirm',
 };
