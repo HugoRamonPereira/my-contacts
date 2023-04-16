@@ -12,7 +12,7 @@ import Loader from '../../components/Loader';
 import ErrorX from '../../assets/images/icon/red-x-line-icon.svg';
 import EmptyBox from '../../assets/images/icon/empty-box.svg';
 import magnifier from '../../assets/images/icon/magnifier-question.svg';
-// import Modal from '../../components/Modal';
+import Modal from '../../components/Modal';
 
 export default function Home() {
   const [contacts, setContacts] = useState([]);
@@ -59,7 +59,16 @@ export default function Home() {
 
   return (
     <Styled.Container>
-      {/* <Modal danger /> */}
+      <Modal
+        danger
+        title="Do you really wish to delete the contact?"
+        confirmLabel="Delete"
+        onCancel={() => alert('Cancelled!')}
+        onConfirm={() => alert('Confirmed!')}
+      >
+        <h2>Don&apos;t delete this contact!</h2>
+        <pre>This action cannot be reverted!</pre>
+      </Modal>
       <Loader isLoading={isLoading} />
       {contacts.length > 0 && (
         <Styled.SearchInputContainer>

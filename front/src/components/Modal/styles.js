@@ -6,7 +6,7 @@ export const Overlay = styled.div`
   justify-content: center;
   background: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(8px);
-  position: absolute;
+  position: fixed;
   width: 100%;
   height: 100%;
   left: 0;
@@ -20,20 +20,21 @@ export const Container = styled.div`
   border-radius: 0.25rem;
   padding: 1.5rem;
 
-  h1 {
+  /* This means that only the direct children of the container will receive the styles below */
+  > h1 {
     font-size: 1.375rem;
     color: ${({ theme, danger }) => (
     danger ? theme.colors.red.red400 : theme.colors.gray.gray900
   )}
   }
 
-  p {
-    margin-top: 0.5rem;
+  .modal-body {
+    margin-top: 1.5rem;
   }
 `;
 
 export const Footer = styled.footer`
-  margin-top: 2rem;
+  margin-top: 1.5rem;
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -45,7 +46,7 @@ export const Footer = styled.footer`
     border: 2px solid ${({ theme }) => theme.colors.gray.gray200};
     border-radius: 0.25rem;
     font-size: 1rem;
-    margin-right: 0.5rem;
+    margin-right: 1.2rem;
     color: ${({ theme }) => theme.colors.gray.gray200};
     transition: border 0.1s ease-in, color 0.1s ease-in;
 
@@ -53,24 +54,6 @@ export const Footer = styled.footer`
       border: 2px solid ${({ theme }) => theme.colors.gray.gray500};
       color: ${({ theme }) => theme.colors.gray.gray500}
 
-    }
-  }
-
-  Button {
-    .trashDelete {
-      display: none;
-    }
-
-    &:hover {
-      width: 28%;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      transition: width 0.4s ease-in;
-
-      .trashDelete{
-        display: flex;
-      }
     }
   }
 
