@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import * as Styled from './styles';
 import ContactService from '../../services/ContactService';
 import { Button } from '../../components/Button';
+import userAvatar from '../../assets/images/contact-avatar.svg';
 import arrow from '../../assets/images/icon/arrow.svg';
 import edit from '../../assets/images/icon/edit.svg';
 import trashcan from '../../assets/images/icon/trashcan.svg';
@@ -25,9 +26,12 @@ export default function Home() {
   const [contactTargetedToBeDeleted, setContactTargetedToBeDeleted] = useState(null);
   const [isDeletionLoading, setIsDeletionLoading] = useState(false);
 
-  const filteredContacts = useMemo(() => contacts.filter((contact) => (
-    contact.name.toLowerCase().includes(searchUser.toLocaleLowerCase())
-  )), [contacts, searchUser]);
+  const filteredContacts = useMemo(
+    () => contacts.filter(
+      (contact) => contact.name.toLowerCase().includes(searchUser.toLocaleLowerCase()),
+    ),
+    [contacts, searchUser],
+  );
 
   const loadContacts = useCallback(async () => {
     try {
@@ -48,9 +52,7 @@ export default function Home() {
   }, [loadContacts]);
 
   const handleToggleOrderBy = () => {
-    setOrderBy(
-      (prevState) => (prevState === 'asc' ? 'desc' : 'asc'),
-    );
+    setOrderBy((prevState) => (prevState === 'asc' ? 'desc' : 'asc'));
   };
 
   const handleSearchUser = (e) => {
@@ -126,14 +128,12 @@ export default function Home() {
           // eslint-disable-next-line no-nested-ternary
           hasError
             ? 'flex-end'
-            : (
-              contacts.length > 0
-                ? 'space-between'
-                : 'center'
-            )
+            : contacts.length > 0
+              ? 'space-between'
+              : 'center'
         }
       >
-        {(!hasError && contacts.length > 0) && (
+        {!hasError && contacts.length > 0 && (
           <strong>
             {filteredContacts.length}
             &nbsp;
@@ -157,7 +157,7 @@ export default function Home() {
 
       {!hasError && (
         <>
-          {(contacts.length < 1 && !isLoading) && (
+          {contacts.length < 1 && !isLoading && (
             <Styled.EmptyListContainer>
               <img src={EmptyBox} alt="Empty box" />
               <p>
@@ -171,7 +171,7 @@ export default function Home() {
             </Styled.EmptyListContainer>
           )}
 
-          {(contacts.length > 0 && filteredContacts < 1) && (
+          {contacts.length > 0 && filteredContacts < 1 && (
             <Styled.NotFoundContainer>
               <img src={magnifier} alt="Magnifier" />
 
@@ -188,26 +188,35 @@ export default function Home() {
           )}
 
           {filteredContacts.length > 0 && (
-          <Styled.ListHeader orderBy={orderBy}>
-            <button type="button" onClick={handleToggleOrderBy}>
-              <span>Name</span>
-              <img src={arrow} alt="arrow" />
-            </button>
-          </Styled.ListHeader>
+            <Styled.ListHeader orderBy={orderBy}>
+              <button type="button" onClick={handleToggleOrderBy}>
+                <span>Name</span>
+                <img src={arrow} alt="arrow" />
+              </button>
+            </Styled.ListHeader>
           )}
 
           {filteredContacts.map((contact) => (
             <Styled.ContactCard key={contact.id}>
               <div className="info">
+                <Styled.AvatarContainer>
+                  <img src={userAvatar} alt="user-avatar" />
+                </Styled.AvatarContainer>
                 <div className="contact-name">
-                  <strong>{contact.name}</strong>
-                  {contact.category_name && (
-                  <small>{contact.category_name}</small>
-                  )}
+                  <div className="contact-name-info">
+                    <strong>{contact.name}</strong>
+                    {contact.category_name && (
+                      <small>{contact.category_name}</small>
+                    )}
+                  </div>
+
+                  <div className="contact-details">
+                    <span>{contact.email}</span>
+                    <span>{contact.phone}</span>
+                  </div>
                 </div>
-                <span>{contact.email}</span>
-                <span>{contact.phone}</span>
               </div>
+
               <div className="actions">
                 <Link to={`/edit/${contact.id}`}>
                   <img src={edit} alt="Edit" />

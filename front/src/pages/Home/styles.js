@@ -90,10 +90,16 @@ export const ContactCard = styled.div`
   }
 
   .info {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
     .contact-name {
       display: flex;
-      align-items: center;
+      flex-direction: column;
+      align-items: right;
       margin-bottom: 0.25rem;
+      margin-left: 1rem;
 
       small {
         background: ${({ theme }) => theme.colors.primary.purpleLighter};
@@ -103,6 +109,11 @@ export const ContactCard = styled.div`
         padding: 0.25rem;
         border-radius: 0.25rem;
         margin-left: 0.5rem;
+      }
+
+      .contact-name-info {
+        display: flex;
+        flex-direction: row;
       }
     }
 
@@ -123,6 +134,11 @@ export const ContactCard = styled.div`
       margin-left: 0.7rem;
     }
   }
+`;
+
+export const AvatarContainer = styled.div`
+  width: 60px;
+  height: 60px;
 `;
 
 export const ErrorContainer = styled.div`
