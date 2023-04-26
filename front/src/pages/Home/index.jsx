@@ -1,9 +1,5 @@
-import {
-  useCallback, useEffect, useMemo, useState,
-} from 'react';
 import { Link } from 'react-router-dom';
 import * as Styled from './styles';
-import ContactService from '../../services/ContactService';
 import { Button } from '../../components/Button';
 import userAvatar from '../../assets/images/contact-avatar.svg';
 import arrow from '../../assets/images/icon/arrow.svg';
@@ -14,90 +10,26 @@ import ErrorX from '../../assets/images/icon/red-x-line-icon.svg';
 import EmptyBox from '../../assets/images/icon/empty-box.svg';
 import magnifier from '../../assets/images/icon/magnifier-question.svg';
 import Modal from '../../components/Modal';
-import toast from '../../utils/toast';
+import useHome from './useHome';
 
 export default function Home() {
-  const [contacts, setContacts] = useState([]);
-  const [orderBy, setOrderBy] = useState('asc');
-  const [searchUser, setSearchUser] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
-  const [hasError, setHasError] = useState(false);
-  const [isDeleteModalShown, setIsDeletedModalShown] = useState(false);
-  const [contactTargetedToBeDeleted, setContactTargetedToBeDeleted] = useState(null);
-  const [isDeletionLoading, setIsDeletionLoading] = useState(false);
-
-  const filteredContacts = useMemo(
-    () => contacts.filter(
-      (contact) => contact.name.toLowerCase().includes(searchUser.toLocaleLowerCase()),
-    ),
-    [contacts, searchUser],
-  );
-
-  const loadContacts = useCallback(async () => {
-    try {
-      setIsLoading(true);
-      const contactsList = await ContactService.listContacts(orderBy);
-      // const contactsList = []; await ContactService.listContacts(orderBy);
-      setHasError(false);
-      setContacts(contactsList);
-    } catch {
-      setHasError(true);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [orderBy]);
-
-  useEffect(() => {
-    loadContacts();
-  }, [loadContacts]);
-
-  const handleToggleOrderBy = () => {
-    setOrderBy((prevState) => (prevState === 'asc' ? 'desc' : 'asc'));
-  };
-
-  const handleSearchUser = (e) => {
-    setSearchUser(e.target.value);
-  };
-
-  const handleTryAgain = () => {
-    loadContacts();
-  };
-
-  const handleDeleteContact = (contact) => {
-    setContactTargetedToBeDeleted(contact);
-    setIsDeletedModalShown(true);
-  };
-
-  const handleHideDeleteModal = () => {
-    setIsDeletedModalShown(false);
-    setContactTargetedToBeDeleted(null);
-  };
-
-  const handleConfirmContactDeletion = async () => {
-    try {
-      setIsDeletionLoading(true);
-
-      await ContactService.deleteContact(contactTargetedToBeDeleted.id);
-
-      setContacts((prevState) => prevState.filter(
-        (contact) => contact.id !== contactTargetedToBeDeleted.id,
-      ));
-
-      handleHideDeleteModal();
-
-      toast({
-        type: 'success',
-        text: 'Contact deleted successfully!',
-      });
-    } catch {
-      toast({
-        type: 'error',
-        text: 'Failed to delete contact!',
-      });
-    } finally {
-      setIsDeletionLoading(false);
-    }
-  };
+  const {
+    isLoading,
+    contactTargetedToBeDeleted,
+    isDeleteModalShown,
+    isDeletionLoading,
+    handleHideDeleteModal,
+    handleConfirmContactDeletion,
+    contacts,
+    searchUser,
+    handleSearchUser,
+    hasError,
+    filteredContacts,
+    handleTryAgain,
+    orderBy,
+    handleToggleOrderBy,
+    handleDeleteContact,
+  } = useHome();
 
   return (
     <Styled.Container>

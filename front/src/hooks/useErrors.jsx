@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 
 export const useErrors = () => {
   const [errors, setErrors] = useState([]);
 
-  const setError = ({ field, message }) => {
+  const setError = useCallback(({ field, message }) => {
     const emailErrorExists = errors.find((error) => error.field === field);
 
     if (emailErrorExists) {
@@ -14,17 +14,17 @@ export const useErrors = () => {
       ...prevState,
       { field, message },
     ]);
-  };
+  }, [errors]);
 
-  const removeError = (fieldName) => {
+  const removeError = useCallback((fieldName) => {
     setErrors((prevState) => prevState.filter(
       (error) => error.field !== fieldName,
     ));
-  };
+  }, []);
 
-  const getErrorMessageByFieldName = (fieldName) => {
-    return errors.find((error) => error.field === fieldName)?.message;
-  };
+  const getErrorMessageByFieldName = useCallback((fieldName) => (
+    errors.find((error) => error.field === fieldName)?.message
+  ), [errors]);
 
   return {
     errors,
