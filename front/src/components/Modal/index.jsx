@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import * as Styled from './styles';
 import { Button } from '../Button';
 import ReactPortal from '../ReactPortal';
+import useAnimatedUnmount from '../../hooks/useAnimatedUnmount';
 
 export default function Modal({
   danger,
@@ -14,16 +15,15 @@ export default function Modal({
   onConfirm,
   isLoading,
 }) {
-  // This controls the visibility of the modal
-  // A prop is being passed here so that we can control the modal here
-  // Not in the components we use it
-  if (!visible) {
+  const { shouldRender, animatedElementRef } = useAnimatedUnmount(visible);
+
+  if (!shouldRender) {
     return null;
   }
   return (
     <ReactPortal containerId="modal-root">
-      <Styled.Overlay>
-        <Styled.Container danger={danger}>
+      <Styled.Overlay isLeaving={!visible} ref={animatedElementRef}>
+        <Styled.Container danger={danger} isLeaving={!visible}>
           <h1>{title}</h1>
           <div className="modal-body">
             {children}
