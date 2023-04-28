@@ -1,4 +1,20 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
+
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+  } to {
+    opacity: 1;
+  }
+`;
+
+const scaleIn = keyframes`
+  from {
+    transform: scale(0);
+  } to {
+    transform: scale(1);
+  }
+`;
 
 export const Overlay = styled.div`
   display: flex;
@@ -11,6 +27,7 @@ export const Overlay = styled.div`
   height: 100%;
   left: 0;
   top: 0;
+  animation: ${fadeIn} 0.3s;
 `;
 
 export const Container = styled.div`
@@ -19,6 +36,7 @@ export const Container = styled.div`
   background: #FFFFFF;
   border-radius: 0.25rem;
   padding: 1.5rem;
+  animation: ${scaleIn} 0.3s;
 
   /* This means that only the direct children of the container will receive the styles below */
   > h1 {
