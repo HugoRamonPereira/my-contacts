@@ -1,28 +1,12 @@
 import PropTypes from 'prop-types';
-import { useEffect, useRef } from 'react';
+import { memo, useEffect } from 'react';
 import * as Styled from './styles';
 import xCircle from '../../../assets/images/icon/x-circle.svg';
 import greenCircle from '../../../assets/images/icon/check-circle.svg';
 
-export default function ToastMessage({
-  message, onRemoveMessage, isLeaving, onAnimationEnd,
+function ToastMessage({
+  message, onRemoveMessage, isLeaving, animatedRef,
 }) {
-  const animatedElementRef = useRef(null);
-  useEffect(() => {
-    const handleAnimationEnd = () => {
-      onAnimationEnd(message.id);
-    };
-
-    const elementRef = animatedElementRef.current;
-    if (isLeaving) {
-      elementRef.addEventListener('animationend', handleAnimationEnd);
-    }
-
-    return () => {
-      elementRef.removeEventListener('animationend', handleAnimationEnd);
-    };
-  }, [isLeaving, message.id, onAnimationEnd]);
-
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       onRemoveMessage(message.id);
@@ -44,7 +28,7 @@ export default function ToastMessage({
       tabIndex={0}
       role="button"
       isLeaving={isLeaving}
-      ref={animatedElementRef}
+      ref={animatedRef}
     >
       {message.type === 'error' && <img src={xCircle} alt="X" />}
       {message.type === 'success' && <img src={greenCircle} alt="Check" />}
@@ -61,6 +45,8 @@ ToastMessage.propTypes = {
     type: PropTypes.oneOf(['default', 'success', 'error']),
   }).isRequired,
   onRemoveMessage: PropTypes.func.isRequired,
-  onAnimationEnd: PropTypes.func.isRequired,
   isLeaving: PropTypes.bool.isRequired,
+  animatedRef: PropTypes.shape().isRequired,
 };
+
+export default memo(ToastMessage);
