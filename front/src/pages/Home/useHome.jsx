@@ -1,5 +1,5 @@
 import {
-  useCallback, useEffect, useMemo, useState,
+  useCallback, useEffect, useState, useDeferredValue, useMemo,
 } from 'react';
 import ContactService from '../../services/ContactService';
 import toast from '../../utils/toast';
@@ -7,19 +7,18 @@ import toast from '../../utils/toast';
 export default function useHome() {
   const [contacts, setContacts] = useState([]);
   const [orderBy, setOrderBy] = useState('asc');
-  const [searchUser, setSearchUser] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
   const [isDeleteModalShown, setIsDeletedModalShown] = useState(false);
   const [contactTargetedToBeDeleted, setContactTargetedToBeDeleted] = useState(null);
   const [isDeletionLoading, setIsDeletionLoading] = useState(false);
 
-  const filteredContacts = useMemo(
-    () => contacts.filter((contact) => contact.name
-      .toLowerCase()
-      .includes(searchUser.toLocaleLowerCase())),
-    [contacts, searchUser],
-  );
+  const [searchUser, setSearchUser] = useState('');
+  const deferredSearchUser = useDeferredValue(searchUser);
+
+  const filteredContacts = useMemo(() => contacts.filter((contact) => (
+    contact.name.toLowerCase().includes(deferredSearchUser.toLocaleLowerCase())
+  )), [contacts, deferredSearchUser]);
 
   const loadContacts = useCallback(async () => {
     try {
@@ -39,9 +38,9 @@ export default function useHome() {
     loadContacts();
   }, [loadContacts]);
 
-  const handleToggleOrderBy = () => {
+  const handleToggleOrderBy = useCallback(() => {
     setOrderBy((prevState) => (prevState === 'asc' ? 'desc' : 'asc'));
-  };
+  }, []);
 
   const handleSearchUser = (e) => {
     setSearchUser(e.target.value);
@@ -51,10 +50,10 @@ export default function useHome() {
     loadContacts();
   };
 
-  const handleDeleteContact = (contact) => {
+  const handleDeleteContact = useCallback((contact) => {
     setContactTargetedToBeDeleted(contact);
     setIsDeletedModalShown(true);
-  };
+  }, []);
 
   const handleHideDeleteModal = () => {
     setIsDeletedModalShown(false);
