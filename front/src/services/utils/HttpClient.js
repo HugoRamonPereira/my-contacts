@@ -10,6 +10,7 @@ class HttpClient {
     return this.makeRequest(path, {
       method: 'GET',
       headers: options?.headers,
+      signal: options?.signal,
     });
   }
 
@@ -43,6 +44,12 @@ class HttpClient {
 
     if (options.body) {
       headers.append('Content-Type', 'application/json');
+    }
+
+    if (options.headers) {
+      Object.entries(options.headers).forEach(([name, value]) => {
+        headers.append(name, value);
+      });
     }
 
     const response = await fetch(`${this.baseURL}${path}`, {

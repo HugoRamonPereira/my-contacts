@@ -13,27 +13,35 @@ export default function useEditContact() {
   const isMounted = useIsMounted();
 
   useEffect(() => {
+    const controller = new AbortController();
+
     async function loadContact() {
       try {
-        const contact = await ContactsService.getContactById(id);
+        const contact = await ContactsService.getContactById(id, controller.signal);
 
         if (isMounted()) {
           contactFormRef.current.setFieldsValues(contact);
           setIsLoading(false);
           setContactName(contact.name);
         }
-      } catch {
-        if (isMounted()) {
-          navigate('/');
-          toast({
-            type: 'error',
-            text: 'Contact couldn\'t be found!',
-          });
+      } catch (error) {
+        if (!(error instanceof DOMException && error.name === 'AbortError')) {
+          if (isMounted()) {
+            navigate('/');
+            toast({
+              type: 'error',
+              text: 'Contact couldn\'t be found!',
+            });
+          }
         }
       }
     }
 
     loadContact();
+
+    return () => {
+      controller.abort();
+    };
   }, [id, navigate, isMounted]);
 
   const handleSubmit = async (contact) => {
