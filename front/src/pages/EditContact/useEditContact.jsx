@@ -6,8 +6,9 @@ import useIsMounted from '../../hooks/useIsMounted';
 
 export default function useEditContact() {
   const [isLoading, setIsLoading] = useState(true);
-  const contactFormRef = useRef(null);
   const [contactName, setContactName] = useState('');
+  const contactFormRef = useRef(null);
+
   const { id } = useParams();
   const navigate = useNavigate();
   const isMounted = useIsMounted();
